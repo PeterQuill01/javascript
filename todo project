@@ -6,6 +6,10 @@ const todos = document.querySelector('#todos')
 form.addEventListener('submit',function (e){
 
     e.preventDefault();
+    addtodo();
+
+})
+function addtodo(){
 
     const todoText= input.value;
 
@@ -14,5 +18,35 @@ form.addEventListener('submit',function (e){
         const todoEl = document.createElement("li");
         todoEl.innerText= todoText;
         todos.appendChild(todoEl);
+
+        todoEl.addEventListener("click",function(){
+            todoEl.classList.toggle("completed");
+            updateLS();
+        });
+
+        todoEl.addEventListener("contextmenu",function(e){
+            e.preventDefault();
+            todoEl.remove();
+           
+        })
+
+        input.value= '';
+        updateLS()
     }
-})
+}
+
+function updateLS(){
+    const todosEl = document.querySelectorAll('li');
+    const todos=[]
+
+   todosEl.forEach(todoEl=>{
+       todos.push({
+            text:todoEl.innerText,
+            completed:todoEl.classList.contains("completed")
+
+        })
+    })
+
+    localStorage.setItem('todo',JSON.stringify(todos))
+}
+
